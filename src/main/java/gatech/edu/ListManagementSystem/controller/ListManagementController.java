@@ -37,9 +37,6 @@ import gatech.edu.ListManagementSystem.model.ActionStep;
 import gatech.edu.ListManagementSystem.model.PersonList;
 import gatech.edu.ListManagementSystem.repo.PersonListRepository;
 import gatech.edu.ListManagementSystem.repo.ActionRepository;
-import gatech.edu.STIECR.DB.model.ECRData;
-import gatech.edu.STIECR.DB.repo.ECRDataRepository;
-import gatech.edu.STIECR.JSON.ECR;
 
 @CrossOrigin
 @RestController
@@ -61,10 +58,10 @@ public class ListManagementController {
 	public ResponseEntity<PersonList> postPersonList(@RequestBody PersonList list){
 		personListRepository.save(list);
 		//TODO: Use TaskScheduler object to schedule process
-		Action action = list.getProcess();
+		/*Action action = list.getAction();
 		for(ActionStep step: action.getSteps()) {
 			taskScheduler.schedule(step, new CronTrigger(action.getCronString())); //This is where the fireworks are
-		}
+		}*/
 		return new ResponseEntity<PersonList>(list,HttpStatus.CREATED);
 	}
 	

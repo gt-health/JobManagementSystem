@@ -5,15 +5,17 @@ import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "processStep", schema = "listmanagementsystem")
+@Table(name = "actionStep", schema = "listmanagementsystem")
 public class ActionStep implements Runnable{
 	@Id
 	@Column(name = "id")
@@ -23,8 +25,7 @@ public class ActionStep implements Runnable{
 	protected String name;
 	@Column(name = "type")
 	protected ActionStepType type;
-	@Column(name = "params")
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ElementCollection
 	protected Map<String,String> params;
 	
 	@Override

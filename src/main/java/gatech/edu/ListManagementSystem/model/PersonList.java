@@ -3,10 +3,12 @@ package gatech.edu.ListManagementSystem.model;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,8 +22,9 @@ public class PersonList {
 	@Column(name = "name")
 	private String name;
 	@Column(name = "listElements")
+	@ElementCollection(targetClass=Integer.class)
 	private List<Integer> listElements;
-	@Column(name = "Action")
+	@OneToOne
 	private Action action;
 	
 	public Integer getId() {
@@ -42,12 +45,10 @@ public class PersonList {
 	public void setListElements(List<Integer> listElements) {
 		this.listElements = listElements;
 	}
-	public Action getProcess() {
+	public Action getAction() {
 		return action;
 	}
-	public void setProcess(Action action) {
+	public void setAction(Action action) {
 		this.action = action;
 	}
-	
-	
 }

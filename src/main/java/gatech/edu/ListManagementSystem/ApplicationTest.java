@@ -15,13 +15,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableAutoConfiguration
-@EntityScan("gatech.edu.STIECR.DB.model")
-@EnableJpaRepositories("gatech.edu.STIECR.DB.repo")
+@EntityScan("gatech.edu.ListManagementSystem.model")
+@EnableJpaRepositories("gatech.edu.ListManagementSystem.repo")
 @ComponentScan("gatech.edu.ListManagementSystem.controller")
 @ComponentScan("gatech.edu.ListManagementSystem")
-@ComponentScan("gatech.edu.ListManagementSystem.service")
+@EnableScheduling
 @SpringBootApplication
 public class ApplicationTest extends SpringBootServletInitializer{
 

@@ -11,19 +11,19 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "process", schema = "listmanagementsystem")
+@Table(name = "action", schema = "listmanagementsystem")
 public class Action implements Runnable{
+	
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	protected Integer id;
 	@Column(name = "name")
-	private String name;
-	@Column(name = "steps")
-	@OneToMany(mappedBy="process")
-	private List<ActionStep> steps;
+	protected String name;
+	@OneToMany()
+	protected List<ActionStep> steps;
 	@Column(name = "cronstring")
-	private String cronString;
+	protected String cronString;
 	
 	public Integer getId() {
 		return id;
@@ -31,6 +31,7 @@ public class Action implements Runnable{
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
 	public String getName() {
 		return name;
 	}
@@ -49,6 +50,8 @@ public class Action implements Runnable{
 	public void setCronString(String cronString) {
 		this.cronString = cronString;
 	}
+	
+	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
