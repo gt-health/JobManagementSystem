@@ -22,6 +22,7 @@ pipeline{
             steps{
                 script{
                     rancher confirm: true, credentialId: 'gt-rancher-server', endpoint: 'https://gt-rancher.hdap.gatech.edu/v2-beta', environmentId: '1a7', environments: '', image: 'gt-build.hdap.gatech.edu/pacerfhirfilter:latest', ports: '', service: 'PACER/listmanagementsystem', timeout: 60
+                    rancher confirm: true, credentialId: 'gt-rancher-server', endpoint: 'https://gt-rancher.hdap.gatech.edu/v2-beta', environmentId: '1a7', environments: '', image: 'postgres:latest', ports: '', service: 'PACER/lms-db', timeout: 50
                 }
             }
         }

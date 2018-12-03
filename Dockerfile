@@ -15,7 +15,7 @@ ENV POSTGRES_USER postgres
 ENV POSTGRES_PASSWORD postgres
 ENV POSTGRES_DB lmsdb
 
-#RUN mvn clean install -DskipTests -f ecrLib/ecr_javalib
+RUN mvn clean install -DskipTests
 ADD . /usr/src/lms_src/
 RUN cp /usr/src/lms_src/target/ListManagementSystem-0.0.1-SNAPSHOT.war $CATALINA_HOME/webapps/
 COPY wait-for-postgres.sh /usr/local/bin/wait-for-postgres.sh
