@@ -10,8 +10,8 @@ pipeline{
                 script{
                     docker.withRegistry('https://gt-build.hdap.gatech.edu'){
                         //Build and push the database image
-                        def fhirFilterImage = docker.build("pacerlistmanagementsystem:1.0", "-f ./Dockerfile .")
-                        fhirFilterImage.push('latest')
+                        def lmsImage = docker.build("pacerlistmanagementsystem:1.0", "-f ./Dockerfile .")
+                        lmsImage.push('latest')
                     }
                 }
             }
