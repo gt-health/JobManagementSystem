@@ -1,21 +1,11 @@
-#Use the Postgres image as a base
-FROM tomcat:latest
+#Use the maven as "builder" and then use builder to share an artifact to the real tomcat service
 MAINTAINER Mike Riley "michael.riley@gtri.gatech.edu"
 
-RUN apt-get update -y && apt-get upgrade -y
+FROM maven:3.5.4-jdk-8 as builder
+COPY . /usr/src/app
+WORKDIR /usr/src/app
+RUN mvn package
 
-RUN apt-get install -y \
-      git \
-      postgresql \
-      openjdk-8-jdk \
-      maven
-	  
-# Define environment variable
-ENV POSTGRES_USER postgres
-ENV POSTGRES_PASSWORD postgres
-ENV POSTGRES_DB lmsdb
-
-RUN mvn clean install -DskipTests
-ADD . /usr/src/lms_src/
-RUN cp /usr/src/lms_src/target/ListManagementSystem-0.0.1-SNAPSHOT.war $CATALINA_HOME/webapps/
-COPY wait-for-postgres.sh /usr/local/bin/wait-for-postgres.sh
+FROM tomcat:latest
+COPY --from=builder /usr/src/lms_src/target/ListManagementSystem-0.0.1-SNAPSHOT.war $CATALINA_HOME/webapps/
+EXPOSE 8080
