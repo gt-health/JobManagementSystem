@@ -33,7 +33,6 @@ import org.springframework.web.client.RestClientException;
 
 import gatech.edu.ListManagementSystem.ConnectionConfiguration;
 import gatech.edu.ListManagementSystem.model.Action;
-import gatech.edu.ListManagementSystem.model.ActionStep;
 import gatech.edu.ListManagementSystem.model.PersonList;
 import gatech.edu.ListManagementSystem.repo.PersonListRepository;
 import gatech.edu.ListManagementSystem.repo.ActionRepository;
@@ -58,10 +57,8 @@ public class ListManagementController {
 	public ResponseEntity<PersonList> postPersonList(@RequestBody PersonList list){
 		personListRepository.save(list);
 		//TODO: Use TaskScheduler object to schedule process
-		/*Action action = list.getAction();
-		for(ActionStep step: action.getSteps()) {
-			taskScheduler.schedule(step, new CronTrigger(action.getCronString())); //This is where the fireworks are
-		}*/
+		Action action = list.getAction();
+		taskScheduler.schedule(action, new CronTrigger(action.getCronString())); //This is where the fireworks are
 		return new ResponseEntity<PersonList>(list,HttpStatus.CREATED);
 	}
 	

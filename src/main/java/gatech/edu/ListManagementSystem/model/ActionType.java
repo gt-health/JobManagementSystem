@@ -1,5 +1,5 @@
 package gatech.edu.ListManagementSystem.model;
 
-public enum ActionStepType {
+public enum ActionType {
 	REST
 }

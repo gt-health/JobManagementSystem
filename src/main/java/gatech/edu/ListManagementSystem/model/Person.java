@@ -8,25 +8,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "personList", schema = "listmanagementsystem")
-public class PersonList {
-	
+@Table(name = "person", schema = "listmanagementsystem")
+public class Person {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@Column(name = "name")
 	private String name;
-	@Column(name = "listElements")
-	@OneToMany
-	private List<Person> listElements;
-	@OneToOne
-	private Action action;
+	@Column(name = "processState")
+	private PersonProcessState processState;
 	
 	public Integer getId() {
 		return id;
@@ -40,16 +34,10 @@ public class PersonList {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public List<Person> getListElements() {
-		return listElements;
+	public PersonProcessState getProcessState() {
+		return processState;
 	}
-	public void setListElements(List<Person> listElements) {
-		this.listElements = listElements;
-	}
-	public Action getAction() {
-		return action;
-	}
-	public void setAction(Action action) {
-		this.action = action;
+	public void setProcessState(PersonProcessState processState) {
+		this.processState = processState;
 	}
 }
