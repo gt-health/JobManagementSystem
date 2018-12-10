@@ -2,6 +2,8 @@ package gatech.edu.ListManagementSystem.model;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -27,7 +29,7 @@ public class Action implements Runnable{
 	protected ActionType actionType;
 	@Column(name = "cronstring")
 	protected String cronString;
-	@OneToOne
+	@OneToOne(mappedBy = "action")
 	protected PersonList personList;
 	@ElementCollection
 	protected Map<String,String> params;
@@ -67,6 +69,19 @@ public class Action implements Runnable{
 	}
 	public void setParams(Map<String, String> params) {
 		this.params = params;
+	}
+	
+	public Set<Person> runnableList(){
+		Set<Person> returnSet = personList.getListElements();
+		switch(personList.getRunType()) {
+		case NEW_ONLY:
+			returnSet = returnSet.stream().filter(x -> x.getProcessState().equals(PersonProcessState.NONE)
+					|| x.getProcessState().equals(PersonProcessState.INLIST)
+					|| x.getProcessState().equals(PersonProcessState.ERROR)).collect(Collectors.toSet());
+			break;
+		default:
+		}
+		return returnSet;
 	}
 	
 	@Override

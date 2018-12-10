@@ -33,6 +33,7 @@ import org.springframework.web.client.RestClientException;
 
 import gatech.edu.ListManagementSystem.ConnectionConfiguration;
 import gatech.edu.ListManagementSystem.model.Action;
+import gatech.edu.ListManagementSystem.model.ListRunType;
 import gatech.edu.ListManagementSystem.model.PersonList;
 import gatech.edu.ListManagementSystem.repo.PersonListRepository;
 import gatech.edu.ListManagementSystem.repo.ActionRepository;
@@ -55,10 +56,17 @@ public class ListManagementController {
 	
 	@RequestMapping(value = "List", method = RequestMethod.POST)
 	public ResponseEntity<PersonList> postPersonList(@RequestBody PersonList list){
+		PersonList oldList = personListRepository.findByName(list.getName());
+		if(oldList != null) {
+			oldList = mergeLists(oldList,list);
+			oldList.setRunType(ListRunType.UNFINISHED_ONLY);
+			list = oldList;
+		}
 		personListRepository.save(list);
 		//TODO: Use TaskScheduler object to schedule process
 		Action action = list.getAction();
 		taskScheduler.schedule(action, new CronTrigger(action.getCronString())); //This is where the fireworks are
+		action.run();
 		return new ResponseEntity<PersonList>(list,HttpStatus.CREATED);
 	}
 	
@@ -73,5 +81,12 @@ public class ListManagementController {
 		actionRepository.save(action);
 		//TODO: Use TaskManager object to schedule process
 		return new ResponseEntity<Action>(action,HttpStatus.CREATED);
+	}
+	
+	//TODO: merge lists together.
+	
+	public PersonList mergeLists(PersonList listA, PersonList listB) {
+		listA.getListElements().addAll(listB.getListElements());
+		return listA;
 	}
 }

@@ -24,15 +24,15 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan("gatech.edu.ListManagementSystem")
 @EnableScheduling
 @SpringBootApplication
-public class ApplicationTest extends SpringBootServletInitializer{
+public class ListManagementSystemApplication extends SpringBootServletInitializer{
 
-	private static final Logger log = LoggerFactory.getLogger(ApplicationTest.class);
+	private static final Logger log = LoggerFactory.getLogger(ListManagementSystemApplication.class);
 
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(ApplicationTest.class);
+		return application.sources(ListManagementSystemApplication.class);
 	}
 	public static void main(String[] args) {
-		SpringApplication.run(ApplicationTest.class);
+		SpringApplication.run(ListManagementSystemApplication.class);
 	}
 	
 }

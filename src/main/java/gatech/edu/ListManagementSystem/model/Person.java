@@ -20,7 +20,7 @@ public class Person {
 	@Column(name = "name")
 	private String name;
 	@Column(name = "processState")
-	private PersonProcessState processState;
+	private PersonProcessState processState = PersonProcessState.NONE;
 	
 	public Integer getId() {
 		return id;

@@ -1,6 +1,7 @@
 package gatech.edu.ListManagementSystem.model;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -22,9 +23,13 @@ public class PersonList {
 	private Integer id;
 	@Column(name = "name")
 	private String name;
+	@Column(name = "type")
+	private ListType type;
+	@Column(name = "runType")
+	private ListRunType runType = ListRunType.ALL;
 	@Column(name = "listElements")
 	@OneToMany
-	private List<Person> listElements;
+	private Set<Person> listElements;
 	@OneToOne
 	private Action action;
 	
@@ -40,10 +45,22 @@ public class PersonList {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public List<Person> getListElements() {
+	public ListType getType() {
+		return type;
+	}
+	public void setType(ListType type) {
+		this.type = type;
+	}
+	public ListRunType getRunType() {
+		return runType;
+	}
+	public void setRunType(ListRunType runType) {
+		this.runType = runType;
+	}
+	public Set<Person> getListElements() {
 		return listElements;
 	}
-	public void setListElements(List<Person> listElements) {
+	public void setListElements(Set<Person> listElements) {
 		this.listElements = listElements;
 	}
 	public Action getAction() {

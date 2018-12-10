@@ -2,11 +2,13 @@ package gatech.edu.ListManagementSystem.model.ProcessImpl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.web.client.RestTemplate;
 
 import gatech.edu.ListManagementSystem.model.Action;
 import gatech.edu.ListManagementSystem.model.ActionType;
+import gatech.edu.ListManagementSystem.model.ListRunType;
 import gatech.edu.ListManagementSystem.model.Person;
 import gatech.edu.ListManagementSystem.model.PersonProcessState;
 
@@ -18,7 +20,16 @@ public class RestAction extends Action{
 	}
 	
 	public void run() {
-		for(Person person : personList.getListElements()) {
+		Set<Person> list = runnableList();
+		for(Person person : list) {
+			boolean runBefore = false;
+			switch(person.getProcessState()) {
+			case NEW_COMPLETE:
+			case OLD_COMPLETE:
+			case ERROR:
+				runBefore = true;
+				break;
+			}
 			person.setProcessState(PersonProcessState.PROCESSING);
 			RestTemplate rest = new RestTemplate();
 			Map<String,String> paramsCopy = new HashMap<String,String>(params);
@@ -47,7 +58,11 @@ public class RestAction extends Action{
 				person.setProcessState(PersonProcessState.ERROR);
 				continue;
 			}
-			person.setProcessState(PersonProcessState.COMPLETE);
+			if(runBefore)
+				person.setProcessState(PersonProcessState.OLD_COMPLETE);
+			else
+				person.setProcessState(PersonProcessState.NEW_COMPLETE);
 		}
+		personList.setRunType(ListRunType.ALL);
 	}
 }
