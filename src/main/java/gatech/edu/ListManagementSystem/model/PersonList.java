@@ -23,6 +23,8 @@ public class PersonList {
 	private Integer id;
 	@Column(name = "name")
 	private String name;
+	@Column(name = "recordType")
+	private String recordType;
 	@Column(name = "type")
 	private ListType type;
 	@Column(name = "runType")
@@ -44,6 +46,12 @@ public class PersonList {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getRecordType() {
+		return recordType;
+	}
+	public void setRecordType(String recordType) {
+		this.recordType = recordType;
 	}
 	public ListType getType() {
 		return type;

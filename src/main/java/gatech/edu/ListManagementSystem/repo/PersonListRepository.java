@@ -7,5 +7,6 @@ import gatech.edu.ListManagementSystem.model.PersonList;
 
 @Repository
 public interface PersonListRepository extends JpaRepository<PersonList, Integer>{
+	public PersonList findById(Integer id);
 	public PersonList findByName(String name);
 }
