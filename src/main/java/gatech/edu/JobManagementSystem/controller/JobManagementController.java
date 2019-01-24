@@ -1,4 +1,4 @@
-package gatech.edu.ListManagementSystem.controller;
+package gatech.edu.JobManagementSystem.controller;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -37,23 +37,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 
-import gatech.edu.ListManagementSystem.model.Action;
-import gatech.edu.ListManagementSystem.model.ListRunType;
-import gatech.edu.ListManagementSystem.model.PersonList;
-import gatech.edu.ListManagementSystem.repo.PersonListRepository;
-import gatech.edu.ListManagementSystem.repo.ActionRepository;
+import gatech.edu.JobManagementSystem.model.Action;
+import gatech.edu.JobManagementSystem.model.ListRunType;
+import gatech.edu.JobManagementSystem.model.PersonList;
+import gatech.edu.JobManagementSystem.repo.ActionRepository;
+import gatech.edu.JobManagementSystem.repo.PersonListRepository;
 
 @CrossOrigin
 @RestController
-public class ListManagementController {
+public class JobManagementController {
 	
-	private static final Logger log = LoggerFactory.getLogger(ListManagementController.class);
+	private static final Logger log = LoggerFactory.getLogger(JobManagementController.class);
 	private PersonListRepository personListRepository;
 	private ActionRepository actionRepository;
 	private TaskScheduler taskScheduler;
 	
 	@Autowired
-	public ListManagementController(PersonListRepository personListRepository,ActionRepository actionRepository,TaskScheduler taskScheduler) {
+	public JobManagementController(PersonListRepository personListRepository,ActionRepository actionRepository,TaskScheduler taskScheduler) {
 		this.personListRepository = personListRepository;
 		this.actionRepository = actionRepository;
 		this.taskScheduler = taskScheduler;

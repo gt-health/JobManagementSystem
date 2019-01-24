@@ -1,4 +1,4 @@
-package gatech.edu.ListManagementSystem.model.ProcessImpl;
+package gatech.edu.JobManagementSystem.model.ProcessImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,11 +6,11 @@ import java.util.Set;
 
 import org.springframework.web.client.RestTemplate;
 
-import gatech.edu.ListManagementSystem.model.Action;
-import gatech.edu.ListManagementSystem.model.ActionType;
-import gatech.edu.ListManagementSystem.model.ListRunType;
-import gatech.edu.ListManagementSystem.model.Person;
-import gatech.edu.ListManagementSystem.model.PersonProcessState;
+import gatech.edu.JobManagementSystem.model.Action;
+import gatech.edu.JobManagementSystem.model.ActionType;
+import gatech.edu.JobManagementSystem.model.ListRunType;
+import gatech.edu.JobManagementSystem.model.Person;
+import gatech.edu.JobManagementSystem.model.PersonProcessState;
 
 public class RestAction extends Action{
 	

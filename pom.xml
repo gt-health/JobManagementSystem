@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>gatech.edu</groupId>
-  <artifactId>ListManagementSystem</artifactId>
+  <artifactId>JobManagementSystem</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
   <name>PHCR_Controller</name>

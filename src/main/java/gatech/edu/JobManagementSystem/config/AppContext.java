@@ -1,4 +1,4 @@
-package gatech.edu.ListManagementSystem.config;
+package gatech.edu.JobManagementSystem.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

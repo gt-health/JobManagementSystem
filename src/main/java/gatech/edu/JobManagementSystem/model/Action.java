@@ -1,4 +1,4 @@
-package gatech.edu.ListManagementSystem.model;
+package gatech.edu.JobManagementSystem.model;
 
 import java.util.List;
 import java.util.Map;

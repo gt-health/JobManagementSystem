@@ -1,4 +1,4 @@
-package gatech.edu.ListManagementSystem;
+package gatech.edu.JobManagementSystem;
 
 import java.util.Date;
 
@@ -18,21 +18,21 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableAutoConfiguration
-@EntityScan("gatech.edu.ListManagementSystem.model")
-@EnableJpaRepositories("gatech.edu.ListManagementSystem.repo")
-@ComponentScan("gatech.edu.ListManagementSystem.controller")
-@ComponentScan("gatech.edu.ListManagementSystem")
+@EntityScan("gatech.edu.JobManagementSystem.model")
+@EnableJpaRepositories("gatech.edu.JobManagementSystem.repo")
+@ComponentScan("gatech.edu.JobManagementSystem.controller")
+@ComponentScan("gatech.edu.JobManagementSystem")
 @EnableScheduling
 @SpringBootApplication
-public class ListManagementSystemApplication extends SpringBootServletInitializer{
+public class JobManagementSystemApplication extends SpringBootServletInitializer{
 
-	private static final Logger log = LoggerFactory.getLogger(ListManagementSystemApplication.class);
+	private static final Logger log = LoggerFactory.getLogger(JobManagementSystemApplication.class);
 
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(ListManagementSystemApplication.class);
+		return application.sources(JobManagementSystemApplication.class);
 	}
 	public static void main(String[] args) {
-		SpringApplication.run(ListManagementSystemApplication.class);
+		SpringApplication.run(JobManagementSystemApplication.class);
 	}
 	
 }
