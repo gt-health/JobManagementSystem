@@ -3,7 +3,7 @@ FROM maven:3.5.4-jdk-8 as builder
 MAINTAINER Mike Riley "michael.riley@gtri.gatech.edu"
 COPY . /usr/src/app
 WORKDIR /usr/src/app
-RUN mvn package
+RUN mvn package -DskipTests
 
 FROM tomcat:latest
 COPY --from=builder /usr/src/app/target/JobManagementSystem-0.0.1-SNAPSHOT.war $CATALINA_HOME/webapps/
