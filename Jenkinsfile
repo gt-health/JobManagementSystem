@@ -10,7 +10,7 @@ pipeline{
                 script{
                     docker.withRegistry('https://gt-build.hdap.gatech.edu'){
                         //Build and push the database image
-                        def lmsImage = docker.build("pacerlistmanagementsystem:1.0", "-f ./Dockerfile .")
+                        def lmsImage = docker.build("pacerjobmanagementsystem:1.0", "-f ./Dockerfile .")
                         lmsImage.push('latest')
                     }
                 }
@@ -21,8 +21,7 @@ pipeline{
         stage('Notify'){
             steps{
                 script{
-                    rancher confirm: true, credentialId: 'gt-rancher-server', endpoint: 'https://gt-rancher.hdap.gatech.edu/v2-beta', environmentId: '1a7', environments: '', image: 'gt-build.hdap.gatech.edu/pacerfhirfilter:latest', ports: '', service: 'PACER/listmanagementsystem', timeout: 60
-                    rancher confirm: true, credentialId: 'gt-rancher-server', endpoint: 'https://gt-rancher.hdap.gatech.edu/v2-beta', environmentId: '1a7', environments: '', image: 'postgres:latest', ports: '', service: 'PACER/lms-db', timeout: 50
+                    rancher confirm: true, credentialId: 'gt-rancher-server', endpoint: 'https://gt-rancher.hdap.gatech.edu/v2-beta', environmentId: '1a7', environments: '', image: 'gt-build.hdap.gatech.edu/pacerjobmanagementsystem:latest', ports: '', service: 'PACER/jobmanagementsystem', timeout: 60
                 }
             }
         }

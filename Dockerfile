@@ -6,5 +6,5 @@ WORKDIR /usr/src/app
 RUN mvn package
 
 FROM tomcat:latest
-COPY --from=builder /usr/src/app/target/ListManagementSystem-0.0.1-SNAPSHOT.war $CATALINA_HOME/webapps/
+COPY --from=builder /usr/src/app/target/JobManagementSystem-0.0.1-SNAPSHOT.war $CATALINA_HOME/webapps/
 EXPOSE 8080
