@@ -8,15 +8,20 @@ import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 @Entity
-@Table(name = "action", schema = "listmanagementsystem")
+@Table(name = "action")
 public class Action implements Runnable{
 	
 	@Id
@@ -25,13 +30,16 @@ public class Action implements Runnable{
 	protected Integer id;
 	@Column(name = "name")
 	protected String name;
+	@OneToOne(fetch = FetchType.LAZY)
+	@MapsId
+	@JsonIgnore
+	protected PersonList personList;
 	@Column(name = "actiontype")
 	protected ActionType actionType;
 	@Column(name = "cronstring")
 	protected String cronString;
-	@OneToOne(mappedBy = "action")
-	protected PersonList personList;
-	@ElementCollection
+	@Column(name = "params")
+	@ElementCollection(fetch = FetchType.EAGER)
 	protected Map<String,String> params;
 	
 	public Integer getId() {
@@ -46,6 +54,12 @@ public class Action implements Runnable{
 	public void setName(String name) {
 		this.name = name;
 	}
+	public PersonList getPersonList() {
+		return personList;
+	}
+	public void setPersonList(PersonList personList) {
+		this.personList = personList;
+	}
 	public String getCronString() {
 		return cronString;
 	}
@@ -58,30 +72,11 @@ public class Action implements Runnable{
 	public void setActionType(ActionType actionType) {
 		this.actionType = actionType;
 	}
-	public PersonList getPersonList() {
-		return personList;
-	}
-	public void setPersonList(PersonList personList) {
-		this.personList = personList;
-	}
 	public Map<String, String> getParams() {
 		return params;
 	}
 	public void setParams(Map<String, String> params) {
 		this.params = params;
-	}
-	
-	public Set<Person> runnableList(){
-		Set<Person> returnSet = personList.getListElements();
-		switch(personList.getRunType()) {
-		case NEW_ONLY:
-			returnSet = returnSet.stream().filter(x -> x.getProcessState().equals(PersonProcessState.NONE)
-					|| x.getProcessState().equals(PersonProcessState.INLIST)
-					|| x.getProcessState().equals(PersonProcessState.ERROR)).collect(Collectors.toSet());
-			break;
-		default:
-		}
-		return returnSet;
 	}
 	
 	@Override

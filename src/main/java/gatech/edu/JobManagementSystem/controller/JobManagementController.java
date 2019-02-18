@@ -27,6 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,10 +39,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 
 import gatech.edu.JobManagementSystem.model.Action;
+import gatech.edu.JobManagementSystem.model.ActionType;
 import gatech.edu.JobManagementSystem.model.ListRunType;
 import gatech.edu.JobManagementSystem.model.PersonList;
+import gatech.edu.JobManagementSystem.model.ProcessImpl.RestAction;
 import gatech.edu.JobManagementSystem.repo.ActionRepository;
 import gatech.edu.JobManagementSystem.repo.PersonListRepository;
+import gatech.edu.JobManagementSystem.util.JMSUtil;
 
 @CrossOrigin
 @RestController
@@ -60,7 +64,9 @@ public class JobManagementController {
 	}
 	
 	@RequestMapping(value = "List", method = RequestMethod.POST)
+	@Transactional
 	public ResponseEntity<PersonList> postPersonList(@RequestBody PersonList list,HttpServletRequest request){
+		JMSUtil.perparePersonListForPersistence(list);
 		PersonList oldList = personListRepository.findByName(list.getName());
 		if(oldList != null) {
 			oldList = mergeLists(oldList,list);
@@ -70,8 +76,12 @@ public class JobManagementController {
 		personListRepository.save(list);
 		//TODO: Use TaskScheduler object to schedule process
 		Action action = list.getAction();
-		taskScheduler.schedule(action, new CronTrigger(action.getCronString())); //This is where the fireworks are
-		action.run();
+		if(action != null) {
+			if(action.getCronString() != null) {
+				taskScheduler.schedule(action, new CronTrigger(action.getCronString()));
+			}
+			action.run();
+		}
 		HttpHeaders responseHeaders = new HttpHeaders();
 		try {
 			responseHeaders.setLocation(new URI("/List/"+list.getId()));

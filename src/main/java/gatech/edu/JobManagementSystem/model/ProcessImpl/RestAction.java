@@ -11,6 +11,7 @@ import gatech.edu.JobManagementSystem.model.ActionType;
 import gatech.edu.JobManagementSystem.model.ListRunType;
 import gatech.edu.JobManagementSystem.model.Person;
 import gatech.edu.JobManagementSystem.model.PersonProcessState;
+import gatech.edu.JobManagementSystem.util.JMSUtil;
 
 public class RestAction extends Action{
 	
@@ -20,7 +21,7 @@ public class RestAction extends Action{
 	}
 	
 	public void run() {
-		Set<Person> list = runnableList();
+		Set<Person> list = personList.getRunnableList();
 		for(Person person : list) {
 			boolean runBefore = false;
 			switch(person.getProcessState()) {
@@ -33,11 +34,13 @@ public class RestAction extends Action{
 			person.setProcessState(PersonProcessState.PROCESSING);
 			RestTemplate rest = new RestTemplate();
 			Map<String,String> paramsCopy = new HashMap<String,String>(params);
-			String endpoint = params.get("endpoint");
-			String operation = params.get("operation");
+			String endpoint = paramsCopy.get("endpoint");
+			endpoint = JMSUtil.deannotateString(this, person, endpoint);
+			String operation = paramsCopy.get("operation");
 			String body = params.get("body");
-			params.remove(endpoint);
-			params.remove(operation);
+			body = JMSUtil.deannotateString(this, person, body);
+			paramsCopy.remove(endpoint);
+			paramsCopy.remove(operation);
 			try {
 				switch(operation) {
 				case "GET":
@@ -63,6 +66,5 @@ public class RestAction extends Action{
 			else
 				person.setProcessState(PersonProcessState.NEW_COMPLETE);
 		}
-		personList.setRunType(ListRunType.ALL);
 	}
 }
