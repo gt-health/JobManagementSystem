@@ -41,13 +41,14 @@ public class RestAction extends Action{
 			body = JMSUtil.deannotateString(this, person, body);
 			paramsCopy.remove(endpoint);
 			paramsCopy.remove(operation);
+			String output = "";
 			try {
 				switch(operation) {
 				case "GET":
-					rest.getForEntity(endpoint, String.class, paramsCopy);
+					output = rest.getForEntity(endpoint, String.class, paramsCopy).getBody();
 					break;
 				case "POST":
-					rest.postForEntity(endpoint, body, String.class, paramsCopy);
+					output = rest.postForEntity(endpoint, body, String.class, paramsCopy).getBody();
 					break;
 				case "PUT":
 					rest.put(endpoint, body, paramsCopy);
@@ -61,6 +62,7 @@ public class RestAction extends Action{
 				person.setProcessState(PersonProcessState.ERROR);
 				continue;
 			}
+			person.setResult(output);
 			if(runBefore)
 				person.setProcessState(PersonProcessState.OLD_COMPLETE);
 			else

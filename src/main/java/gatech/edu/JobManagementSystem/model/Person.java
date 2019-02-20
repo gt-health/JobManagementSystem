@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -31,6 +32,9 @@ public class Person{
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
 	private PersonList personList;
+	@Column(name = "result")
+	@Lob
+	private String result;
 	
 	public Integer getId() {
 		return id;
@@ -62,6 +66,28 @@ public class Person{
 	public void setPersonList(PersonList personList) {
 		this.personList = personList;
 	}
+	
+	public String getFirstName() {
+		if(name.split("\\w+").length>1) {
+			return name.substring(0, name.lastIndexOf(' '));
+		}
+		return name;
+	}
+	
+	public String getLastName() {
+		if(name.split("\\w+").length>1) {
+			return name.substring(name.lastIndexOf(' '));
+		}
+		return new String();
+	}
+	
+	public String getResult() {
+		return result;
+	}
+	public void setResult(String result) {
+		this.result = result;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

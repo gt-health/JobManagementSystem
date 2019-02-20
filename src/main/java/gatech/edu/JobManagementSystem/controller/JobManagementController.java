@@ -1,5 +1,6 @@
 package gatech.edu.JobManagementSystem.controller;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -38,9 +39,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+
 import gatech.edu.JobManagementSystem.model.Action;
 import gatech.edu.JobManagementSystem.model.ActionType;
 import gatech.edu.JobManagementSystem.model.ListRunType;
+import gatech.edu.JobManagementSystem.model.Person;
 import gatech.edu.JobManagementSystem.model.PersonList;
 import gatech.edu.JobManagementSystem.model.ProcessImpl.RestAction;
 import gatech.edu.JobManagementSystem.repo.ActionRepository;
@@ -55,17 +63,19 @@ public class JobManagementController {
 	private PersonListRepository personListRepository;
 	private ActionRepository actionRepository;
 	private TaskScheduler taskScheduler;
+	private ObjectMapper objectMapper;
 	
 	@Autowired
 	public JobManagementController(PersonListRepository personListRepository,ActionRepository actionRepository,TaskScheduler taskScheduler) {
 		this.personListRepository = personListRepository;
 		this.actionRepository = actionRepository;
 		this.taskScheduler = taskScheduler;
+		objectMapper = new ObjectMapper();
 	}
 	
 	@RequestMapping(value = "List", method = RequestMethod.POST)
 	@Transactional
-	public ResponseEntity<PersonList> postPersonList(@RequestBody PersonList list,HttpServletRequest request){
+	public ResponseEntity<JsonNode> postPersonList(@RequestBody PersonList list,HttpServletRequest request){
 		JMSUtil.perparePersonListForPersistence(list);
 		PersonList oldList = personListRepository.findByName(list.getName());
 		if(oldList != null) {
@@ -82,6 +92,22 @@ public class JobManagementController {
 			}
 			action.run();
 		}
+		ArrayNode results = JsonNodeFactory.instance.arrayNode();
+		for(Person person:list.getListElements()) {
+			JsonNode node = null;
+			try {
+				node = objectMapper.readTree(person.getResult());
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(node != null) {
+				results.add(node);
+			}
+		}
 		HttpHeaders responseHeaders = new HttpHeaders();
 		try {
 			responseHeaders.setLocation(new URI("/List/"+list.getId()));
@@ -89,7 +115,7 @@ public class JobManagementController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<PersonList>(list,responseHeaders,HttpStatus.CREATED);
+		return new ResponseEntity<JsonNode>(results,responseHeaders,HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(value = "List/{id}", method = RequestMethod.GET)

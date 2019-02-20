@@ -75,8 +75,13 @@ public class Action implements Runnable{
 	public Map<String, String> getParams() {
 		return params;
 	}
+	
 	public void setParams(Map<String, String> params) {
 		this.params = params;
+	}
+	
+	public void addParam(String key, String value) {
+		this.params.put(key, value);
 	}
 	
 	@Override

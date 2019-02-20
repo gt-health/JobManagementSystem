@@ -19,6 +19,14 @@ public class JMSUtil {
 			personList.setAction(restAction);
 		}
 		action = personList.getAction();
+		if(action == null) {
+			action = new RestAction();
+			action.setName("Post to resultsmanager to update the ECR with FHIR data");
+			action.setCronString("* * 8 * * *");
+			action.addParam("endpoint","resultsmanager/case?patientId=${person.id}&firstName=${person.firstName}&${person.lastName}&cqlType=myCQL");
+			action.addParam("operation","POST");
+			action.addParam("body","");
+		}
 		action.setPersonList(personList);
 		for(Person person: personList.getListElements()) {
 			person.setPersonList(personList);
@@ -32,6 +40,12 @@ public class JMSUtil {
 		}
 		if(person.getName() != null) {
 			inputString = inputString.replaceAll("\\$\\{person.name\\}", person.getName());
+		}
+		if(person.getName() != null) {
+			inputString = inputString.replaceAll("\\$\\{person.firstName\\}", person.getFirstName());
+		}
+		if(person.getName() != null) {
+			inputString = inputString.replaceAll("\\$\\{person.lastName\\}", person.getLastName());
 		}
 		if(action.getPersonList().getName() != null) {
 			inputString = inputString.replaceAll("\\$\\{list.name\\}", action.getPersonList().getName());
