@@ -6,7 +6,7 @@
   <artifactId>JobManagementSystem</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
-  <name>PHCR_Controller</name>
+  <name>JobManagementSystem</name>
   <url>http://maven.apache.org</url>
 
 	<parent>
