@@ -69,5 +69,4 @@
   		<url>https://repository.jboss.org/nexus/content/repositories/releases</url>
   	</repository>
   </repositories>
-  <packaging>war</packaging>
 </project>

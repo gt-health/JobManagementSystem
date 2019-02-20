@@ -7,8 +7,8 @@ RUN mvn package -DskipTests
 
 FROM java:8-jdk
 #move the WAR for contesa to the webapps directory
-COPY --from=builder /usr/src/app/target/JobManagementSystem-0.0.1-SNAPSHOT.war /usr/src/app/JobManagementSystem.jar
+COPY --from=builder /usr/src/app/target/JobManagementSystem-0.0.1-SNAPSHOT.jar /usr/src/app/JobManagementSystem.jar
 WORKDIR /usr/src/app
 EXPOSE 8080
 #CMD ["tail", "-f", "/dev/nulljava"]
-CMD ["java", "-jar", "/usr/src/app/CQLStorage.jar"]
+CMD ["java", "-jar", "/usr/src/app/JobManagementSystem.jar"]
