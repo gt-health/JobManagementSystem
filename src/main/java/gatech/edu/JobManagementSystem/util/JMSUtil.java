@@ -10,15 +10,6 @@ public class JMSUtil {
 	
 	public static PersonList perparePersonListForPersistence(PersonList personList) {
 		Action action = personList.getAction();
-		if(action.getActionType().equals(ActionType.REST)) {
-			RestAction restAction = new RestAction();
-			restAction.setCronString(action.getCronString());
-			restAction.setId(action.getId());
-			restAction.setName(action.getName());
-			restAction.setParams(action.getParams());
-			personList.setAction(restAction);
-		}
-		action = personList.getAction();
 		if(action == null) {
 			action = new RestAction();
 			action.setName("Post to resultsmanager to update the ECR with FHIR data");
@@ -27,6 +18,15 @@ public class JMSUtil {
 			action.addParam("operation","POST");
 			action.addParam("body","");
 		}
+		else if(action.getActionType().equals(ActionType.REST)) {
+			RestAction restAction = new RestAction();
+			restAction.setCronString(action.getCronString());
+			restAction.setId(action.getId());
+			restAction.setName(action.getName());
+			restAction.setParams(action.getParams());
+			personList.setAction(restAction);
+		}
+		action = personList.getAction();
 		action.setPersonList(personList);
 		for(Person person: personList.getListElements()) {
 			person.setPersonList(personList);
