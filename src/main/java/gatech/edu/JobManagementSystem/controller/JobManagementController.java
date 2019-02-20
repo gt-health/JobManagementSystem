@@ -94,18 +94,20 @@ public class JobManagementController {
 		}
 		ArrayNode results = JsonNodeFactory.instance.arrayNode();
 		for(Person person:list.getListElements()) {
-			JsonNode node = null;
-			try {
-				node = objectMapper.readTree(person.getResult());
-			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if(node != null) {
-				results.add(node);
+			if(person.getResult() != null) {
+				JsonNode node = null;
+				try {
+					node = objectMapper.readTree(person.getResult());
+				} catch (JsonProcessingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(node != null) {
+					results.add(node);
+				}
 			}
 		}
 		HttpHeaders responseHeaders = new HttpHeaders();

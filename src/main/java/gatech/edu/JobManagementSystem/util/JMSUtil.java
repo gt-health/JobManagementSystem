@@ -17,6 +17,7 @@ public class JMSUtil {
 			action.addParam("endpoint","resultsmanager/case?patientId=${person.id}&firstName=${person.firstName}&${person.lastName}&cqlType=myCQL");
 			action.addParam("operation","POST");
 			action.addParam("body","");
+			personList.setAction(action);
 		}
 		else if(action.getActionType().equals(ActionType.REST)) {
 			RestAction restAction = new RestAction();
