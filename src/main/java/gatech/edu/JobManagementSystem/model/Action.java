@@ -1,5 +1,6 @@
 package gatech.edu.JobManagementSystem.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,7 +41,7 @@ public class Action implements Runnable{
 	protected String cronString;
 	@Column(name = "params")
 	@ElementCollection(fetch = FetchType.EAGER)
-	protected Map<String,String> params;
+	protected Map<String,String> params = new HashMap<String,String>();
 	
 	public Integer getId() {
 		return id;
