@@ -68,9 +68,11 @@ public class RestAction extends Action{
 				}
 			}
 			catch(Exception e) {
+				log.debug("exception while requesting:"+e);
 				person.setProcessState(PersonProcessState.ERROR);
 				continue;
 			}
+			log.debug("output:"+output);
 			person.setResult(output);
 			if(runBefore)
 				person.setProcessState(PersonProcessState.OLD_COMPLETE);
