@@ -90,6 +90,7 @@ public class JobManagementController {
 		personListRepository.save(list);
 		//TODO: Use TaskScheduler object to schedule process
 		Action action = list.getAction();
+		log.debug("action:"+action.toString());
 		if(action != null) {
 			if(action.getCronString() != null) {
 				log.debug("scheduling action:"+action.toString());

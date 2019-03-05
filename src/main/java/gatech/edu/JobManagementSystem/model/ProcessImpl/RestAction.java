@@ -17,7 +17,7 @@ import gatech.edu.JobManagementSystem.model.PersonProcessState;
 import gatech.edu.JobManagementSystem.util.JMSUtil;
 
 public class RestAction extends Action{
-	private static final Logger log = LoggerFactory.getLogger(JobManagementController.class);
+	private static final Logger log = LoggerFactory.getLogger(RestAction.class);
 	
 	public RestAction() {
 		super();
