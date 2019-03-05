@@ -80,8 +80,8 @@ public class JobManagementController {
 		JMSUtil.perparePersonListForPersistence(list);
 		log.debug("personlist after presistenceprep:"+list.toString());
 		PersonList oldList = personListRepository.findByName(list.getName());
-		log.debug("oldList:"+oldList.toString());
 		if(oldList != null) {
+			log.debug("oldList:"+oldList.toString());
 			oldList = mergeLists(oldList,list);
 			oldList.setRunType(ListRunType.UNFINISHED_ONLY);
 			list = oldList;
