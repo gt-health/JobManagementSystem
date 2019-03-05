@@ -76,18 +76,23 @@ public class JobManagementController {
 	@RequestMapping(value = "List", method = RequestMethod.POST)
 	@Transactional
 	public ResponseEntity<JsonNode> postPersonList(@RequestBody PersonList list,HttpServletRequest request){
+		log.debug("personlist before presistenceprep:"+list.toString());
 		JMSUtil.perparePersonListForPersistence(list);
+		log.debug("personlist after presistenceprep:"+list.toString());
 		PersonList oldList = personListRepository.findByName(list.getName());
+		log.debug("oldList:"+oldList.toString());
 		if(oldList != null) {
 			oldList = mergeLists(oldList,list);
 			oldList.setRunType(ListRunType.UNFINISHED_ONLY);
 			list = oldList;
 		}
+		log.debug("mergedlist:"+list.toString());
 		personListRepository.save(list);
 		//TODO: Use TaskScheduler object to schedule process
 		Action action = list.getAction();
 		if(action != null) {
 			if(action.getCronString() != null) {
+				log.debug("scheduling action:"+action.toString());
 				taskScheduler.schedule(action, new CronTrigger(action.getCronString()));
 			}
 			action.run();
@@ -121,7 +126,7 @@ public class JobManagementController {
 	}
 	
 	@RequestMapping(value = "List/{id}", method = RequestMethod.GET)
-	public ResponseEntity<PersonList> getECR(@PathVariable("name") Integer id){
+	public ResponseEntity<PersonList> getECR(@PathVariable("id") Integer id){
 		PersonList personList = personListRepository.findById(id);
 		return new ResponseEntity<PersonList>(personList,HttpStatus.OK);
 	}

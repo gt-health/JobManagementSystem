@@ -90,4 +90,11 @@ public class Action implements Runnable{
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public String toString() {
+		return "Action [id=" + id + ", name=" + name + ", actionType=" + actionType
+				+ ", cronString=" + cronString + ", params=" + params + "]";
+	}
+	
+	
 }

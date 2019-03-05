@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
 
+import gatech.edu.JobManagementSystem.controller.JobManagementController;
 import gatech.edu.JobManagementSystem.model.Action;
 import gatech.edu.JobManagementSystem.model.ActionType;
 import gatech.edu.JobManagementSystem.model.ListRunType;
@@ -14,6 +17,7 @@ import gatech.edu.JobManagementSystem.model.PersonProcessState;
 import gatech.edu.JobManagementSystem.util.JMSUtil;
 
 public class RestAction extends Action{
+	private static final Logger log = LoggerFactory.getLogger(JobManagementController.class);
 	
 	public RestAction() {
 		super();
@@ -21,8 +25,10 @@ public class RestAction extends Action{
 	}
 	
 	public void run() {
+		log.debug("Running RestAction:"+this.toString());
 		Set<Person> list = personList.getRunnableList();
 		for(Person person : list) {
+			log.debug("Running RestAction for person:"+person.toString());
 			boolean runBefore = false;
 			switch(person.getProcessState()) {
 			case NEW_COMPLETE:
@@ -41,6 +47,9 @@ public class RestAction extends Action{
 			body = JMSUtil.deannotateString(this, person, body);
 			paramsCopy.remove(endpoint);
 			paramsCopy.remove(operation);
+			log.debug("rest endpoint:"+endpoint);
+			log.debug("rest body:"+body);
+			log.debug("rest operation:"+operation);
 			String output = "";
 			try {
 				switch(operation) {

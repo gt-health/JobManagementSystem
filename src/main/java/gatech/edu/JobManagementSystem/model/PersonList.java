@@ -97,4 +97,11 @@ public class PersonList {
 		}
 		return returnSet;
 	}
+	@Override
+	public String toString() {
+		return "PersonList [id=" + id + ", name=" + name + ", recordType=" + recordType + ", type=" + type
+				+ ", runType=" + runType + ", listElements=" + listElements + ", action=" + action + "]";
+	}
+	
+	
 }
