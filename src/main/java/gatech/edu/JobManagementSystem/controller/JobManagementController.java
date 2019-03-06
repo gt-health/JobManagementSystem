@@ -88,8 +88,10 @@ public class JobManagementController {
 		}
 		log.debug("mergedlist:"+list.toString());
 		personListRepository.save(list);
-		//TODO: Use TaskScheduler object to schedule process
 		Action action = list.getAction();
+		if(action.getActionType() == ActionType.REST) {
+			action = (RestAction)action;
+		}
 		log.debug("action:"+action.toString());
 		if(action != null) {
 			if(action.getCronString() != null) {
