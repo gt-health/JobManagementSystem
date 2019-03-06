@@ -24,6 +24,16 @@ public class RestAction extends Action{
 		actionType = ActionType.REST;
 	}
 	
+	public RestAction(Action action) {
+		super();
+		this.actionType = action.getActionType();
+		this.cronString = action.getCronString();
+		this.name = action.getName();
+		this.id = action.getId();
+		this.params = action.getParams();
+		this.personList = action.getPersonList();
+	}
+	
 	public void run() {
 		log.debug("Running RestAction:"+this.toString());
 		Set<Person> list = personList.getRunnableList();

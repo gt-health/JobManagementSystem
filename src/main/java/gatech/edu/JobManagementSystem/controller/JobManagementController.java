@@ -90,7 +90,7 @@ public class JobManagementController {
 		personListRepository.save(list);
 		Action action = list.getAction();
 		if(action.getActionType() == ActionType.REST) {
-			action = (RestAction)action;
+			action = new RestAction(action);
 		}
 		log.debug("action:"+action.toString());
 		if(action != null) {
