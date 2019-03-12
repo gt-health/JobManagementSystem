@@ -14,7 +14,7 @@ public class JMSUtil {
 			action = new RestAction();
 			action.setName("Post to resultsmanager to update the ECR with FHIR data");
 			action.setCronString("* * 8 * * *");
-			action.addParam("endpoint","http://resultsmanager:8080/ResultsManager/case?identifier=${person.id}&firstName=${person.firstName}&lastName=${person.lastName}&cqlType=myCQL");
+			action.addParam("endpoint","http://resultsmanager:8080/ResultsManager/case?identifier=${person.id}&firstName=${person.firstName}&lastName=${person.lastName}&cqlType=${list.recordType}");
 			action.addParam("operation","POST");
 			action.addParam("body","");
 			personList.setAction(action);
@@ -35,7 +35,10 @@ public class JMSUtil {
 		return personList;
 	}
 	
-	public static String deannotateString(Action action,Person person,String inputString) {
+	public static String deannotateString(PersonList personList, Action action,Person person,String inputString) {
+		if(personList.getRecordType() != null) {
+			inputString = inputString.replaceAll("\\$\\{list.recordType\\}", personList.getRecordType());
+		}
 		if(person.getReferenceId() != null) {
 			inputString = inputString.replaceAll("\\$\\{person.id\\}", person.getReferenceId());
 		}

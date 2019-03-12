@@ -51,10 +51,10 @@ public class RestAction extends Action{
 			RestTemplate rest = new RestTemplate();
 			Map<String,String> paramsCopy = new HashMap<String,String>(params);
 			String endpoint = paramsCopy.get("endpoint");
-			endpoint = JMSUtil.deannotateString(this, person, endpoint);
+			endpoint = JMSUtil.deannotateString(personList, this, person, endpoint);
 			String operation = paramsCopy.get("operation");
 			String body = params.get("body");
-			body = JMSUtil.deannotateString(this, person, body);
+			body = JMSUtil.deannotateString(personList, this, person, body);
 			paramsCopy.remove(endpoint);
 			paramsCopy.remove(operation);
 			log.debug("rest endpoint:"+endpoint);

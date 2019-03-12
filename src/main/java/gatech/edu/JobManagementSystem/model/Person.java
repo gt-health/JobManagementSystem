@@ -76,7 +76,7 @@ public class Person{
 	
 	public String getLastName() {
 		if(name.split("\\w+").length>1) {
-			return name.substring(name.lastIndexOf(' '));
+			return name.substring(name.lastIndexOf(' ') + 1);
 		}
 		return new String();
 	}

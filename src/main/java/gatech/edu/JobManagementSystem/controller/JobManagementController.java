@@ -144,6 +144,15 @@ public class JobManagementController {
 	//TODO: merge lists together.
 	
 	public PersonList mergeLists(PersonList listA, PersonList listB) {
+		if(listA.getId() == null) {
+			listA.setId(listB.getId());
+		}
+		if(listA.getAction() == null) {
+			listA.setAction(listB.getAction());
+		}
+		if(listA.getRecordType() == null) {
+			listA.setRecordType(listB.getRecordType());
+		}
 		listA.getListElements().addAll(listB.getListElements());
 		return listA;
 	}
