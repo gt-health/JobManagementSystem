@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import gatech.edu.JobManagementSystem.model.PersonList;
 
 @Repository
-public interface PersonListRepository extends JpaRepository<PersonList, Integer>{
-	public PersonList findById(Integer id);
+public interface PersonListRepository extends JpaRepository<PersonList, String>{
 	public PersonList findByName(String name);
 }

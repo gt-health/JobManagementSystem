@@ -79,13 +79,6 @@ public class JobManagementController {
 		log.debug("personlist before presistenceprep:"+list.toString());
 		JMSUtil.perparePersonListForPersistence(list);
 		log.debug("personlist after presistenceprep:"+list.toString());
-		PersonList oldList = personListRepository.findByName(list.getName());
-		if(oldList != null) {
-			log.debug("oldList:"+oldList.toString());
-			oldList = mergeLists(oldList,list);
-			list = oldList;
-		}
-		log.debug("mergedlist:"+list.toString());
 		personListRepository.save(list);
 		Action action = list.getAction();
 		if(action.getActionType() == ActionType.REST) {
@@ -119,7 +112,7 @@ public class JobManagementController {
 		}
 		HttpHeaders responseHeaders = new HttpHeaders();
 		try {
-			responseHeaders.setLocation(new URI("/List/"+list.getId()));
+			responseHeaders.setLocation(new URI("/List/"+list.getName()));
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -127,9 +120,9 @@ public class JobManagementController {
 		return new ResponseEntity<JsonNode>(results,responseHeaders,HttpStatus.CREATED);
 	}
 	
-	@RequestMapping(value = "List/{id}", method = RequestMethod.GET)
-	public ResponseEntity<PersonList> getECR(@PathVariable("id") Integer id){
-		PersonList personList = personListRepository.findById(id);
+	@RequestMapping(value = "List/{name}", method = RequestMethod.GET)
+	public ResponseEntity<PersonList> getECR(@PathVariable("name") String name){
+		PersonList personList = personListRepository.findByName(name);
 		return new ResponseEntity<PersonList>(personList,HttpStatus.OK);
 	}
 	
@@ -143,14 +136,17 @@ public class JobManagementController {
 	//TODO: merge lists together.
 	
 	public PersonList mergeLists(PersonList listA, PersonList listB) {
-		if(listA.getId() == null) {
-			listA.setId(listB.getId());
-		}
 		if(listA.getAction() == null) {
 			listA.setAction(listB.getAction());
 		}
 		if(listA.getJobType() == null) {
 			listA.setJobType(listB.getJobType());
+		}
+		if(listA.getListType() == null) {
+			listA.setListType(listB.getListType());
+		}
+		if(listA.getRunType() == null) {
+			listA.setRunType(listB.getRunType());
 		}
 		listA.getListElements().addAll(listB.getListElements());
 		return listA;

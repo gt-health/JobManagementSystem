@@ -32,7 +32,6 @@ public class Action implements Runnable{
 	@Column(name = "name")
 	protected String name;
 	@OneToOne(fetch = FetchType.LAZY)
-	@MapsId
 	@JsonIgnore
 	protected PersonList personList;
 	@Column(name = "actiontype")
@@ -94,6 +93,56 @@ public class Action implements Runnable{
 	public String toString() {
 		return "Action [id=" + id + ", name=" + name + ", actionType=" + actionType
 				+ ", cronString=" + cronString + ", params=" + params + "]";
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((actionType == null) ? 0 : actionType.hashCode());
+		result = prime * result + ((cronString == null) ? 0 : cronString.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((params == null) ? 0 : params.hashCode());
+		result = prime * result + ((personList == null) ? 0 : personList.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Action other = (Action) obj;
+		if (actionType != other.actionType)
+			return false;
+		if (cronString == null) {
+			if (other.cronString != null)
+				return false;
+		} else if (!cronString.equals(other.cronString))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (params == null) {
+			if (other.params != null)
+				return false;
+		} else if (!params.equals(other.params))
+			return false;
+		if (personList == null) {
+			if (other.personList != null)
+				return false;
+		} else if (!personList.equals(other.personList))
+			return false;
+		return true;
 	}
 	
 	

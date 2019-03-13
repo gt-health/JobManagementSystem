@@ -24,10 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class PersonList {
 	
 	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
-	@Column(name = "name")
+	@Column(name = "name",unique = true)
 	private String name;
 	@Column(name = "jobType")
 	private String jobType;
@@ -41,12 +38,6 @@ public class PersonList {
 	@OneToOne(mappedBy = "personList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Action action;
 	
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
 	public String getName() {
 		return name;
 	}
@@ -100,9 +91,58 @@ public class PersonList {
 	
 	@Override
 	public String toString() {
-		return "PersonList [id=" + id + ", name=" + name + ", jobType=" + jobType + ", listType=" + listType
+		return "PersonList [ name=" + name + ", jobType=" + jobType + ", listType=" + listType
 				+ ", runType=" + runType + ", listElements=" + listElements + ", action=" + action + "]";
 	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((action == null) ? 0 : action.hashCode());
+		result = prime * result + ((jobType == null) ? 0 : jobType.hashCode());
+		result = prime * result + ((listElements == null) ? 0 : listElements.hashCode());
+		result = prime * result + ((listType == null) ? 0 : listType.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((runType == null) ? 0 : runType.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PersonList other = (PersonList) obj;
+		if (action == null) {
+			if (other.action != null)
+				return false;
+		} else if (!action.equals(other.action))
+			return false;
+		if (jobType == null) {
+			if (other.jobType != null)
+				return false;
+		} else if (!jobType.equals(other.jobType))
+			return false;
+		if (listElements == null) {
+			if (other.listElements != null)
+				return false;
+		} else if (!listElements.equals(other.listElements))
+			return false;
+		if (listType != other.listType)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (runType != other.runType)
+			return false;
+		return true;
+	}
+	
+	
 	
 	
 }
