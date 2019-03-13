@@ -32,7 +32,7 @@ public class PersonList {
 	@Column(name = "jobType")
 	private String jobType;
 	@Column(name = "listType")
-	private ListType listType;
+	private ListType listType = ListType.SINGLE_USE;
 	@Column(name = "runType")
 	private ListRunType runType = ListRunType.ALL;
 	@Column(name = "listElements")
