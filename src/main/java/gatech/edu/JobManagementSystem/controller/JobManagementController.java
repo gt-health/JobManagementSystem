@@ -83,7 +83,6 @@ public class JobManagementController {
 		if(oldList != null) {
 			log.debug("oldList:"+oldList.toString());
 			oldList = mergeLists(oldList,list);
-			oldList.setRunType(ListRunType.UNFINISHED_ONLY);
 			list = oldList;
 		}
 		log.debug("mergedlist:"+list.toString());
@@ -150,8 +149,8 @@ public class JobManagementController {
 		if(listA.getAction() == null) {
 			listA.setAction(listB.getAction());
 		}
-		if(listA.getRecordType() == null) {
-			listA.setRecordType(listB.getRecordType());
+		if(listA.getJobType() == null) {
+			listA.setJobType(listB.getJobType());
 		}
 		listA.getListElements().addAll(listB.getListElements());
 		return listA;

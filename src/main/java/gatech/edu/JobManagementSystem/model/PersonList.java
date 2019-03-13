@@ -29,10 +29,10 @@ public class PersonList {
 	private Integer id;
 	@Column(name = "name")
 	private String name;
-	@Column(name = "recordType")
-	private String recordType;
-	@Column(name = "type")
-	private ListType type;
+	@Column(name = "jobType")
+	private String jobType;
+	@Column(name = "listType")
+	private ListType listType;
 	@Column(name = "runType")
 	private ListRunType runType = ListRunType.ALL;
 	@Column(name = "listElements")
@@ -53,17 +53,17 @@ public class PersonList {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getRecordType() {
-		return recordType;
+	public String getJobType() {
+		return jobType;
 	}
-	public void setRecordType(String recordType) {
-		this.recordType = recordType;
+	public void setJobType(String jobType) {
+		this.jobType = jobType;
 	}
-	public ListType getType() {
-		return type;
+	public ListType getListType() {
+		return listType;
 	}
-	public void setType(ListType type) {
-		this.type = type;
+	public void setListType(ListType type) {
+		this.listType = type;
 	}
 	public ListRunType getRunType() {
 		return runType;
@@ -97,9 +97,10 @@ public class PersonList {
 		}
 		return returnSet;
 	}
+	
 	@Override
 	public String toString() {
-		return "PersonList [id=" + id + ", name=" + name + ", recordType=" + recordType + ", type=" + type
+		return "PersonList [id=" + id + ", name=" + name + ", jobType=" + jobType + ", listType=" + listType
 				+ ", runType=" + runType + ", listElements=" + listElements + ", action=" + action + "]";
 	}
 	
