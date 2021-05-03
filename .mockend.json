@@ -1,9 +1,7 @@
 {
-  "Job": {
-    "jobId": "int",
-    "params": "string",
-    "results": "string",
-    "timeStarted": "string",
-    "jobState": "string"
-  }
+    "jobId": 1,
+    "params": "test1",
+    "results": "yay",
+    "timeStarted": "12:00pm",
+    "jobState": "not started"
 }
