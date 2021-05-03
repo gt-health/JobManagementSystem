@@ -31,13 +31,16 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -47,6 +50,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 import gatech.edu.JobManagementSystem.model.Action;
 import gatech.edu.JobManagementSystem.model.ActionType;
+import gatech.edu.JobManagementSystem.model.JsonTest;
 import gatech.edu.JobManagementSystem.model.ListRunType;
 import gatech.edu.JobManagementSystem.model.ListType;
 import gatech.edu.JobManagementSystem.model.Person;
@@ -54,6 +58,8 @@ import gatech.edu.JobManagementSystem.model.PersonList;
 import gatech.edu.JobManagementSystem.model.ProcessImpl.RestAction;
 import gatech.edu.JobManagementSystem.repo.ActionRepository;
 import gatech.edu.JobManagementSystem.repo.PersonListRepository;
+import gatech.edu.JobManagementSystem.repo.JsonTestRepository;
+import gatech.edu.JobManagementSystem.repo.JobStateRepository;
 import gatech.edu.JobManagementSystem.util.JMSUtil;
 
 @CrossOrigin
@@ -63,13 +69,18 @@ public class JobManagementController {
 	private static final Logger log = LoggerFactory.getLogger(JobManagementController.class);
 	private PersonListRepository personListRepository;
 	private ActionRepository actionRepository;
+	private JsonTestRepository jsonTestRepository;
+	private JobStateRepository jobStateRepository;
 	private TaskScheduler taskScheduler;
 	private ObjectMapper objectMapper;
 	
 	@Autowired
-	public JobManagementController(PersonListRepository personListRepository,ActionRepository actionRepository,TaskScheduler taskScheduler) {
+	public JobManagementController(PersonListRepository personListRepository, ActionRepository actionRepository, 
+			TaskScheduler taskScheduler, JsonTestRepository jsonTestRepository, JobStateRepository jobStateRepository) {
 		this.personListRepository = personListRepository;
 		this.actionRepository = actionRepository;
+		this.jsonTestRepository = jsonTestRepository;
+		this.jobStateRepository = jobStateRepository;
 		this.taskScheduler = taskScheduler;
 		objectMapper = new ObjectMapper();
 	}
@@ -133,6 +144,17 @@ public class JobManagementController {
 		//TODO: Use TaskManager object to schedule process
 		return new ResponseEntity<Action>(action,HttpStatus.CREATED);
 	}
+	
+	@RequestMapping(value = "test", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<JsonTest> getJson() {
+		RestTemplate restTemplate = new RestTemplate();
+		String uri = "https://jsonplaceholder.typicode.com/todos/1";
+		JsonTest response = restTemplate.getForObject(uri, JsonTest.class);
+		return new ResponseEntity<JsonTest>(response, HttpStatus.OK);
+	}
+	
+	
 	
 	//TODO: merge lists together.
 	
