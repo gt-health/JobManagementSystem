@@ -1,0 +1,9 @@
+{
+  "Job": {
+    "jobId": "int",
+    "params": "string",
+    "results": "string",
+    "timeStarted": "string",
+    "jobState": "string"
+  }
+}
