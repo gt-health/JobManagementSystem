@@ -50,6 +50,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 import gatech.edu.JobManagementSystem.model.Action;
 import gatech.edu.JobManagementSystem.model.ActionType;
+import gatech.edu.JobManagementSystem.model.JobState;
 import gatech.edu.JobManagementSystem.model.JsonTest;
 import gatech.edu.JobManagementSystem.model.ListRunType;
 import gatech.edu.JobManagementSystem.model.ListType;
@@ -145,16 +146,40 @@ public class JobManagementController {
 		return new ResponseEntity<Action>(action,HttpStatus.CREATED);
 	}
 	
+	// function gets data from specificed url and displays it at the given endpoint
 	@RequestMapping(value = "test", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<JsonTest> getJson() {
+	public ResponseEntity<JobState> getJobState() {
 		RestTemplate restTemplate = new RestTemplate();
-		String uri = "https://jsonplaceholder.typicode.com/todos/1";
-		JsonTest response = restTemplate.getForObject(uri, JsonTest.class);
-		return new ResponseEntity<JsonTest>(response, HttpStatus.OK);
+		String uri = "https://60914d9350c2550017677f33.mockapi.io/jobs/1";
+		JobState response = restTemplate.getForObject(uri, JobState.class);
+		return new ResponseEntity<JobState>(response, HttpStatus.OK);
 	}
 	
+	// Currently working on a two parter:
+	// Part 1: POST a jobstate to the jobstate repo (should follow the postPersonList function above)
+	@RequestMapping(value = "Jobs", method = RequestMethod.POST)
+	@Transactional
+	public ResponseEntity<String> postJob(@RequestBody JobState job, HttpServletRequest request){
+		jobStateRepository.save(job);
+		String result = "Post Unsuccessful";
+		HttpHeaders responseHeaders = new HttpHeaders();
+		try {
+			responseHeaders.setLocation(new URI("/Jobs/"+job.getJobId()));
+			result = "Post Successful";
+		} catch (URISyntaxException e) {
+
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>(result, responseHeaders, HttpStatus.CREATED);
+	}
 	
+	// Part 2: Retrieve that job state and display it at the new location (should follow getECR function from above)
+	@RequestMapping(value = "Jobs/{jobid}", method = RequestMethod.GET)
+	public ResponseEntity<JobState> getJob(@PathVariable("jobid") Integer jobId){
+		JobState job = jobStateRepository.findByJobId(jobId);
+		return new ResponseEntity<JobState>(job, HttpStatus.OK);
+	}
 	
 	//TODO: merge lists together.
 	

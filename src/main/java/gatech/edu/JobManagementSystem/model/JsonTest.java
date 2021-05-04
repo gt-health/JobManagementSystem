@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class JsonTest{
 	private int userId;
+	@Id
 	private int id;
 	private String title;
 	private String completed;
