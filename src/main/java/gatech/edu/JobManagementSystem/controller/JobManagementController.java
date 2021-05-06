@@ -146,7 +146,7 @@ public class JobManagementController {
 		return new ResponseEntity<Action>(action,HttpStatus.CREATED);
 	}
 	
-	// function gets data from specificed url and displays it at the given endpoint
+	// function gets data from specified url and displays it at the given endpoint
 	@RequestMapping(value = "test", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<JobState> getJobState() {
@@ -168,7 +168,6 @@ public class JobManagementController {
 			responseHeaders.setLocation(new URI("/Jobs/"+job.getJobId()));
 			result = "Post Successful";
 		} catch (URISyntaxException e) {
-
 			e.printStackTrace();
 		}
 		return new ResponseEntity<String>(result, responseHeaders, HttpStatus.CREATED);

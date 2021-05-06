@@ -2,6 +2,8 @@ package gatech.edu.JobManagementSystem.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,7 +29,8 @@ public class JobState{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer jobId;
 	@Column(name = "params")
-	private String params;
+	@ElementCollection(fetch = FetchType.EAGER)
+	private Map<String,String> params = new HashMap<String,String>();
 	@Column(name = "results")
 	private String results;
 	@Column(name = "timeStarted")
@@ -42,10 +45,10 @@ public class JobState{
 		this.jobId = jobId;
 	}
 	
-	public String getParams() {
+	public Map<String,String> getParams() {
 		return params;
 	}
-	public void setParams(String params) {
+	public void setParams(Map<String,String> params) {
 		this.params = params;
 	}
 	
