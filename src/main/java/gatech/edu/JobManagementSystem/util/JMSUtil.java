@@ -1,6 +1,7 @@
 package gatech.edu.JobManagementSystem.util;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import gatech.edu.JobManagementSystem.model.Action;
 import gatech.edu.JobManagementSystem.model.ActionType;
@@ -63,5 +64,11 @@ public class JMSUtil {
 			inputString = inputString.replaceAll("\\$\\{person.labOrderDate\\}", new SimpleDateFormat("yyyy-MM-dd").format(person.getLabOrderDate()));
 		}
 		return inputString;
+	}
+	
+	public static String formatDate(long time) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+		Date dateTime = new Date(time);
+		return formatter.format(dateTime);
 	}
 }

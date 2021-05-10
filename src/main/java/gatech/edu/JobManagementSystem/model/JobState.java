@@ -28,6 +28,8 @@ public class JobState{
 	@Column(name = "jobId")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer jobId;
+	@Column(name = "jobType")
+	private String jobType;
 	@Column(name = "params")
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Map<String,String> params = new HashMap<String,String>();
@@ -43,6 +45,13 @@ public class JobState{
 	}
 	public void setJobId(Integer jobId) {
 		this.jobId = jobId;
+	}
+	
+	public String getJobType() {
+		return jobType;
+	}
+	public void setJobType(String jobType) {
+		this.jobType = jobType;
 	}
 	
 	public Map<String,String> getParams() {
