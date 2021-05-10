@@ -9,7 +9,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,12 +44,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
+import gatech.edu.JobManagementSystem.JobRunnerService;
 import gatech.edu.JobManagementSystem.model.Action;
 import gatech.edu.JobManagementSystem.model.ActionType;
 import gatech.edu.JobManagementSystem.model.JobState;
@@ -74,17 +79,21 @@ public class JobManagementController {
 	private JobStateRepository jobStateRepository;
 	private TaskScheduler taskScheduler;
 	private ObjectMapper objectMapper;
+	private JobRunnerService jobRunnerService;
 	
 	@Autowired
 	public JobManagementController(PersonListRepository personListRepository, ActionRepository actionRepository, 
-			TaskScheduler taskScheduler, JsonTestRepository jsonTestRepository, JobStateRepository jobStateRepository) {
+			TaskScheduler taskScheduler, JsonTestRepository jsonTestRepository, JobStateRepository jobStateRepository, 
+			JobRunnerService jobRunnerService) {
 		this.personListRepository = personListRepository;
 		this.actionRepository = actionRepository;
 		this.jsonTestRepository = jsonTestRepository;
 		this.jobStateRepository = jobStateRepository;
 		this.taskScheduler = taskScheduler;
+		this.jobRunnerService = jobRunnerService;
 		objectMapper = new ObjectMapper();
 	}
+
 	
 	@RequestMapping(value = "List", method = RequestMethod.POST)
 	@Transactional
@@ -157,28 +166,35 @@ public class JobManagementController {
 	}
 	
 	// Currently working on a two parter:
-	// Part 1: POST a jobstate to the jobstate repo (should follow the postPersonList function above)
+	// Part 1: POST a new job to the db with jobState of running, run JobRunnerService and return location
 	@RequestMapping(value = "Jobs", method = RequestMethod.POST)
 	@Transactional
 	public ResponseEntity<String> postJob(@RequestBody JobState job, HttpServletRequest request){
+		String timeStarted = JMSUtil.formatDate(System.currentTimeMillis());
+		job.setTimeStarted(timeStarted);
+		job.setJobState("Not Started");
 		jobStateRepository.save(job);
-		String result = "Post Unsuccessful";
+		String result = "Job Run Unsuccessful";
 		HttpHeaders responseHeaders = new HttpHeaders();
 		try {
 			responseHeaders.setLocation(new URI("/Jobs/"+job.getJobId()));
-			result = "Post Successful";
+			result = "Job results can be found at /Jobs/"+job.getJobId();
+			jobRunnerService.runJob(job);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
+		} catch (InterruptedException ie) {
+			ie.printStackTrace();
 		}
 		return new ResponseEntity<String>(result, responseHeaders, HttpStatus.CREATED);
 	}
 	
-	// Part 2: Retrieve that job state and display it at the new location (should follow getECR function from above)
+	// Part 2: Retrieve that job state and display it at the new location
 	@RequestMapping(value = "Jobs/{jobid}", method = RequestMethod.GET)
 	public ResponseEntity<JobState> getJob(@PathVariable("jobid") Integer jobId){
 		JobState job = jobStateRepository.findByJobId(jobId);
 		return new ResponseEntity<JobState>(job, HttpStatus.OK);
 	}
+	
 	
 	//TODO: merge lists together.
 	
