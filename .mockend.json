@@ -1,0 +1,7 @@
+{
+    "jobId": 1,
+    "params": "test1",
+    "results": "yay",
+    "timeStarted": "12:00pm",
+    "jobState": "not started"
+}
