@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
-import gatech.edu.JobManagementSystem.JobRunnerService;
+import ca.uhn.fhir.context.FhirContext;
+import gatech.edu.JobManagementSystem.TestJobRunnerService;
 import gatech.edu.JobManagementSystem.model.Action;
 import gatech.edu.JobManagementSystem.model.ActionType;
 import gatech.edu.JobManagementSystem.model.JobState;
@@ -61,9 +63,11 @@ import gatech.edu.JobManagementSystem.model.ListRunType;
 import gatech.edu.JobManagementSystem.model.ListType;
 import gatech.edu.JobManagementSystem.model.Person;
 import gatech.edu.JobManagementSystem.model.PersonList;
+import gatech.edu.JobManagementSystem.model.ClarityNLPaaS.NLPaaSResult;
 import gatech.edu.JobManagementSystem.model.ProcessImpl.RestAction;
 import gatech.edu.JobManagementSystem.repo.ActionRepository;
 import gatech.edu.JobManagementSystem.repo.PersonListRepository;
+import gatech.edu.JobManagementSystem.service.NLPaaSToRegistryBundleService;
 import gatech.edu.JobManagementSystem.repo.JsonTestRepository;
 import gatech.edu.JobManagementSystem.repo.JobStateRepository;
 import gatech.edu.JobManagementSystem.util.JMSUtil;
@@ -79,18 +83,20 @@ public class JobManagementController {
 	private JobStateRepository jobStateRepository;
 	private TaskScheduler taskScheduler;
 	private ObjectMapper objectMapper;
-	private JobRunnerService jobRunnerService;
+	private TestJobRunnerService testJobRunnerService;
+	private NLPaaSToRegistryBundleService nLPaaSToRegistryBundleService; 
 	
 	@Autowired
 	public JobManagementController(PersonListRepository personListRepository, ActionRepository actionRepository, 
 			TaskScheduler taskScheduler, JsonTestRepository jsonTestRepository, JobStateRepository jobStateRepository, 
-			JobRunnerService jobRunnerService) {
+			TestJobRunnerService testJobRunnerService, NLPaaSToRegistryBundleService nLPaaSToRegistryBundleService) {
 		this.personListRepository = personListRepository;
 		this.actionRepository = actionRepository;
 		this.jsonTestRepository = jsonTestRepository;
 		this.jobStateRepository = jobStateRepository;
 		this.taskScheduler = taskScheduler;
-		this.jobRunnerService = jobRunnerService;
+		this.testJobRunnerService = testJobRunnerService;
+		this.nLPaaSToRegistryBundleService = nLPaaSToRegistryBundleService;
 		objectMapper = new ObjectMapper();
 	}
 
@@ -166,7 +172,7 @@ public class JobManagementController {
 	}
 	
 	// Currently working on a two parter:
-	// Part 1: POST a new job to the db with jobState of running, run JobRunnerService and return location
+	// Part 1: POST a new job to the db with jobState of running, run TestJobRunnerService and return location
 	@RequestMapping(value = "Jobs", method = RequestMethod.POST)
 	@Transactional
 	public ResponseEntity<String> postJob(@RequestBody JobState job, HttpServletRequest request){
@@ -179,7 +185,7 @@ public class JobManagementController {
 		try {
 			responseHeaders.setLocation(new URI("/Jobs/"+job.getJobId()));
 			result = "Job results can be found at /Jobs/"+job.getJobId();
-			jobRunnerService.runJob(job);
+			testJobRunnerService.runJob(job);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		} catch (InterruptedException ie) {
@@ -195,6 +201,25 @@ public class JobManagementController {
 		return new ResponseEntity<JobState>(job, HttpStatus.OK);
 	}
 	
+	//Test NLPaaSServiceEndpoint
+	@RequestMapping(value = "TestRegistryConversion", method = RequestMethod.POST, produces = { "application/json" })
+	public ResponseEntity<String> testRegistryConversion(@RequestBody JsonNode body) throws JsonParseException, JsonMappingException, IOException{
+		List<NLPaaSResult> resultList = new ArrayList<NLPaaSResult>();
+		ObjectMapper objectMapper = new ObjectMapper();
+		if(body.isArray()) {
+			for(JsonNode resultJsonItem:(ArrayNode) body) {
+				NLPaaSResult result = objectMapper.convertValue(resultJsonItem, NLPaaSResult.class);
+				resultList.add(result);
+			}
+		}
+		else {
+			NLPaaSResult result = objectMapper.convertValue(body, NLPaaSResult.class);
+			resultList.add(result);
+		}
+		Bundle returnBundle = nLPaaSToRegistryBundleService.convert(resultList);
+		String returnString = FhirContext.forDstu3().newJsonParser().encodeResourceToString(returnBundle);
+		return new ResponseEntity<String>(returnString, HttpStatus.OK);
+	}
 	
 	//TODO: merge lists together.
 	

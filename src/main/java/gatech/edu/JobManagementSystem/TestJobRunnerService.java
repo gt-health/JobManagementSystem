@@ -18,12 +18,12 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class JobRunnerService {
+public class TestJobRunnerService {
 
-  private static final Logger logger = LoggerFactory.getLogger(JobRunnerService.class);
+  private static final Logger logger = LoggerFactory.getLogger(TestJobRunnerService.class);
   private JobStateRepository jobStateRepository;
   
-  public JobRunnerService(JobStateRepository jobStateRepository) {
+  public TestJobRunnerService(JobStateRepository jobStateRepository) {
 	  this.jobStateRepository = jobStateRepository;
   }
   

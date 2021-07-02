@@ -20,6 +20,7 @@
   	<java.version>1.10</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <tomcat.version>8.0.45</tomcat.version>
+    <fhir.version>4.1.0</fhir.version>
   </properties>
 
   <dependencies>
@@ -72,6 +73,22 @@
     	<groupId>org.glassfish.jaxb</groupId>
     	<artifactId>jaxb-runtime</artifactId>
     	<version>2.3.2</version>
+    </dependency>
+    <!-- fhir dependencies -->
+    <dependency>
+        <groupId>ca.uhn.hapi.fhir</groupId>
+        <artifactId>hapi-fhir-base</artifactId>
+        <version>${fhir.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>ca.uhn.hapi.fhir</groupId>
+        <artifactId>hapi-fhir-client</artifactId>
+        <version>${fhir.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>ca.uhn.hapi.fhir</groupId>
+        <artifactId>hapi-fhir-structures-dstu3</artifactId>
+        <version>${fhir.version}</version>
     </dependency>
   </dependencies>
   
